@@ -41,8 +41,8 @@ RUN find /app/node_modules/.pnpm -maxdepth 1 -type d \( \
          -o -name '@prisma+client@7.6*' -o -name 'react@*' -o -name 'react-dom@*' \
          -o -name '@types+react*' \
     \) -exec rm -rf {} +; \
-    find /app/node_modules -name "*.wasm" -not -name "*postgresql*" -delete; \
-    find /app/node_modules -name "*.wasm-base64.*" -not -name "*postgresql*" -delete; \
+    find /app/node_modules -name "*.wasm" -not -name "*postgresql*" -not -name "*schema*" -delete; \
+    find /app/node_modules -name "*.wasm-base64.*" -not -name "*postgresql*" -not -name "*schema*" -delete; \
     find /app/node_modules -name "generator-build" -type d -exec rm -rf {} +; \
     find /app/node_modules -name "*.map" -delete; \
     true
@@ -79,8 +79,8 @@ RUN find /app/node_modules -name "*.map" -delete; \
          -o -name '@prisma+get-platform@7.2*' -o -name '@hono+*' \
          -o -name 'consola@*' -o -name 'node-fetch-native@*' \
     \) -exec rm -rf {} +; \
-    find /app/node_modules -name "*.wasm" -not -name "*postgresql*" -delete; \
-    find /app/node_modules -name "*.wasm-base64.*" -not -name "*postgresql*" -delete; \
+    find /app/node_modules -name "*.wasm" -not -name "*postgresql*" -not -name "*schema*" -delete; \
+    find /app/node_modules -name "*.wasm-base64.*" -not -name "*postgresql*" -not -name "*schema*" -delete; \
     find /app/node_modules -name "generator-build" -type d -exec rm -rf {} +; \
     true
 
