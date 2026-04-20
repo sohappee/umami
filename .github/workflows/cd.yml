@@ -2,6 +2,9 @@ name: Build and Push Docker Image
 
 on:
   push:
+    branches:
+      - main
+      - master
     tags:
       - "v*.*.*"
   workflow_dispatch:
@@ -53,7 +56,7 @@ jobs:
           elif [[ "$REF_TYPE" == "tag" ]]; then
             VERSION="${REF_NAME#v}"
           else
-            VERSION=""
+            VERSION="dev-$(echo ${{ github.sha }} | cut -c1-7)"
           fi
 
           TAGS=""
@@ -69,7 +72,7 @@ jobs:
               TAGS="$TAGS,ghcr.io/${{ github.repository }}:${MAJOR}.${MINOR}"
               TAGS="$TAGS,ghcr.io/${{ github.repository }}:${MAJOR}"
 
-              if [[ "$REF_TYPE" == "tag" ]] || [[ "$INCLUDE_LATEST" == "true" ]]; then
+              if [[ "$INCLUDE_LATEST" == "true" ]]; then
                 TAGS="$TAGS,ghcr.io/${{ github.repository }}:latest"
               fi
             fi
