@@ -8,7 +8,6 @@ env:
 
 jobs:
   build:
-    if: github.repository == 'umami-software/umami'
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +21,6 @@ jobs:
         with:
           node-version: 22
           cache: "pnpm"
-      - run: npm install --global pnpm
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - run: pnpm test
       - run: pnpm build
