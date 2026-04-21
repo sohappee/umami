@@ -24,11 +24,17 @@ COPY . .
 COPY docker/proxy.ts ./src
 
 ARG BASE_PATH
+ARG NODE_OPTIONS="--max-old-space-size=3072"
 ENV BASE_PATH=$BASE_PATH
+ENV NODE_OPTIONS=$NODE_OPTIONS
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="postgresql://user:pass@localhost:5432/dummy"
 
-RUN pnpm build-docker
+RUN pnpm build-db \
+    && pnpm build-tracker \
+    && pnpm build-recorder \
+    && pnpm build-geo \
+    && pnpm exec next build --webpack
 
 # ---- Pruned standalone output ----
 FROM alpine:3 AS standalone-pruned
@@ -51,7 +57,7 @@ RUN find /app/node_modules/.pnpm -maxdepth 1 -type d \( \
 FROM base AS deps-prod
 
 RUN apk add --no-cache libc6-compat
-ARG PRISMA_VERSION="7.3.0"
+ARG PRISMA_VERSION="7.6.0"
 RUN pnpm --allow-build='@prisma/engines' add npm-run-all dotenv chalk semver \
     prisma@${PRISMA_VERSION} \
     @prisma/client@${PRISMA_VERSION} \
@@ -71,7 +77,7 @@ RUN find /app/node_modules -name "*.map" -delete; \
          -name '@prisma+studio-*' -o -name '@electric-sql+pglite*' \
          -o -name '@img+*' -o -name 'sharp@*' -o -name 'next@*' \
          -o -name 'effect@*' -o -name 'fast-check@*' -o -name 'mysql2@*' \
-         -o -name 'chevrotain@*' -o -name 'hono@*' -o -name 'valibot@*' \
+         -o -name 'chevrotain@*' -o -name 'hono@*' \
          -o -name 'jiti@*' -o -name 'remeda@*' -o -name 'es-abstract@*' \
          -o -name 'lodash@*' -o -name 'csstype@*' -o -name 'react@*' \
          -o -name 'react-dom@*' -o -name '@types+react@*' \

@@ -1,17 +1,10 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
-import { Inter } from 'next/font/google';
 import { Suspense } from 'react';
 import { getBaseUrl } from '@/lib/get-base-url';
 import { Providers } from './Providers';
 import '@umami/react-zen/styles.full.css';
 import './global.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
 
 export default function ({ children }) {
   if (process.env.DISABLE_UI) {
@@ -23,7 +16,7 @@ export default function ({ children }) {
   }
 
   return (
-    <html lang="en" className={`${inter.className} ${inter.variable}`}>
+    <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
