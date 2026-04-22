@@ -83,7 +83,7 @@ RUN find /app/node_modules -name "*.map" -delete; \
          -o -name 'jiti@*' -o -name 'remeda@*' -o -name 'es-abstract@*' \
          -o -name 'lodash@*' -o -name 'csstype@*' -o -name 'react@*' \
          -o -name 'react-dom@*' -o -name '@types+react@*' \
-         -o -name '@types+react-dom@*' -o -name '@prisma+client@7.6*' \
+         -o -name '@types+react-dom@*' \
          -o -name '@prisma+get-platform@7.2*' -o -name '@hono+*' \
          -o -name 'consola@*' -o -name 'node-fetch-native@*' \
     \) -exec rm -rf {} +; \
