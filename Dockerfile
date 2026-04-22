@@ -13,7 +13,8 @@ FROM base AS deps
 
 RUN apk add --no-cache libc6-compat
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm fetch --frozen-lockfile \
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
+    pnpm fetch --frozen-lockfile \
     && pnpm install --offline --frozen-lockfile --config.confirmModulesPurge=false
 
 # ---- Builder ----
@@ -58,7 +59,8 @@ FROM base AS deps-prod
 
 RUN apk add --no-cache libc6-compat
 ARG PRISMA_VERSION="7.6.0"
-RUN pnpm --allow-build='@prisma/engines' add npm-run-all dotenv chalk semver \
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
+    pnpm --allow-build='@prisma/engines' add npm-run-all dotenv chalk semver \
     prisma@${PRISMA_VERSION} \
     @prisma/client@${PRISMA_VERSION} \
     @prisma/adapter-pg@${PRISMA_VERSION}
